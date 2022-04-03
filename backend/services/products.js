@@ -46,9 +46,15 @@ class ProductsService {
     }
 
     async updatePullArrays(idProduct,{pics,categories}){
-        return await ProductsModel.findByIdAndUpdate(idProduct,{
-            $pull:{categories}
+        // comprobamos si la pic esta en pics sino no eliminamos
+        const product = await ProductsModel.findById(idProduct)
+        product.pics.forEach(pic=>{
+            if(pic===pics)deleteFile(pics)
         })
+        return await ProductsModel.findByIdAndUpdate(idProduct,{
+            $pull:{categories},
+            $pull:{pics}
+        },{new:true})
     }
 
 }
