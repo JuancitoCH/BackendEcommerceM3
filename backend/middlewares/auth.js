@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken')
 const {jwt_secret} = require('../config/envVars')
 
-const Permisos=(rol,req,res,next)=>{
+const Permisos=(role,req,res,next)=>{
     try{
         const {token} = req.cookies
         if(!token)  return res.json({success:false,message:"A Session is Required"})
         const userData = jwt.verify(token,jwt_secret)
-        if(userData.rol<rol) return res.json({success:false,message:"you don't have permissions"})
+        if(userData.role<role) return res.json({success:false,message:"you don't have permissions"})
         req.userData = userData
         next()
     }
@@ -16,16 +16,16 @@ const Permisos=(rol,req,res,next)=>{
     }
 }
 const isAdmin=(req,res,next)=>{
-    const rol = 10
-    Permisos(rol,req,res,next)
+    const role = 10
+    Permisos(role,req,res,next)
 }
 const isUser=(req,res,next)=>{
-    const rol = 0
-    Permisos(rol,req,res,next)
+    const role = 0
+    Permisos(role,req,res,next)
 }
 const isEditorPage=(req,res,next)=>{
-    const rol = 5
-    Permisos(rol,req,res,next)
+    const role = 5
+    Permisos(role,req,res,next)
 }
 
 module.exports = {isAdmin,isUser,isEditorPage}

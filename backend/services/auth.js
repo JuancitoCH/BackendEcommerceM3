@@ -2,9 +2,12 @@ const Users = require('./users')
 const jwt = require('jsonwebtoken')
 const {jwt_secret} = require('../config/envVars')
 const bcrypt = require('bcrypt')
+const Cart = require('../services/cart')
+
 class Auth{
     constructor(){
         this.userService = new Users()
+        this.cartService = new Cart()
     }
     async registerUser(data){
         const {email,password} = data
@@ -16,6 +19,9 @@ class Auth{
         const userRegistered = await this.userService.createUser(data)
         if(userRegistered.success === false) return userRegistered
         
+        
+        await this.cartService.createCartUser(userRegistered._id)
+
         return this.getToken(userRegistered,"Register")
     }
 

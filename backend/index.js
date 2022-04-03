@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth')
 const cookies = require('cookie-parser')
 const storageRoutes = require('./routes/storage')
 const productsRoutes = require('./routes/products')
+const cartRoutes = require('./routes/cart')
 
 
 const app = express()
@@ -29,6 +30,7 @@ userRoutes(app)
 authRoutes(app)
 storageRoutes(app)
 productsRoutes(app)
+cartRoutes(app)
 
 app.get('/',(req,res)=>{
     return res.json({Messsage:"funciona"})

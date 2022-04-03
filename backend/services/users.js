@@ -32,9 +32,9 @@ class userService {
         return await UserModel.findOneAndUpdate({ email }, data, { new: true })
     }
     
-    async deleteUserById(id) {
+    async deleteUserById(_id) {
         
-        return await UserModel.findByIdAndDelete(id)
+        return await UserModel.deleteOne({_id})
     }
     
 }

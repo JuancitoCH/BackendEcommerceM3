@@ -9,6 +9,12 @@ const UsersSchema = new Schema({
     role:{type:Number,default:0}
 })
 
+UsersSchema.pre('deleteOne',function(next){
+    const userId = this.getQuery()['_id']
+    mongoose.model('carts').deleteOne({idUser:userId},next)
+})
+
+
 const UserModel = mongoose.model('users',UsersSchema)
 
 module.exports = UserModel
