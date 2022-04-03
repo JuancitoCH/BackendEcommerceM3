@@ -51,7 +51,7 @@ const downloadFile = (fileName,res)=>{
 
 const deleteFile= async(fileName)=>{
     const responseDelete=await storage.bucket(bucket_name).file(fileName).delete();
-    console.log(responseDelete)
+    // console.log(responseDelete)
 }
 
-module.exports = { uploadFile,downloadFile }
+module.exports = { uploadFile,downloadFile,deleteFile }

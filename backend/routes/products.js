@@ -19,6 +19,20 @@ const productsRoutes =(app)=>{
         const response = await productService.createProduct(req.body,req.file,req.userData.id)
         return res.json(response)
     })
+    router.delete('/delete/:idProduct',isEditorPage,async(req,res)=>{
+        const response = await productService.deleteProduct(req.params.idProduct)
+        return res.json(response)
+    })
+    router.post('/update/:idProduct',upload.single('pic'),isEditorPage,async(req,res)=>{
+        const response = await productService.updateProduct(req.params.idProduct,req.body,req.file)
+        return res.json(response)
+    })
+
+    router.post('/pull/product/:idProduct',isEditorPage,async(req,res)=>{
+        const response = await productService.updatePullArrays(req.params.idProduct,req.body)
+        return res.json(response)
+    })
+    
 
    
     
