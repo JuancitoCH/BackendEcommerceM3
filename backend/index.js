@@ -6,6 +6,8 @@ const {connection} = require('./config/db')
 const userRoutes = require('./routes/users')
 const authRoutes = require('./routes/auth')
 const cookies = require('cookie-parser')
+const storageRoutes = require('./routes/storage')
+const productsRoutes = require('./routes/products')
 
 
 const app = express()
@@ -25,6 +27,8 @@ app.use(cors({
 payments(app)
 userRoutes(app)
 authRoutes(app)
+storageRoutes(app)
+productsRoutes(app)
 
 app.get('/',(req,res)=>{
     return res.json({Messsage:"funciona"})

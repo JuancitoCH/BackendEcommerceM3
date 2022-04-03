@@ -13,7 +13,7 @@ class Auth{
         if(userEmailExist) return {success:false,message:"User Alredy Exist"}
 
         if(password) data.password = await this.cryptPassword(password)
-        const userRegistered =await this.userService.createUser(data)
+        const userRegistered = await this.userService.createUser(data)
         if(userRegistered.success === false) return userRegistered
         
         return this.getToken(userRegistered,"Register")

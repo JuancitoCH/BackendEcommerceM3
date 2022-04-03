@@ -10,5 +10,7 @@ const config={
     db_host:process.env.DB_HOST,
     db_name:process.env.DB_NAME,
     jwt_secret:process.env.JWT_SECRET,
+
+    bucket_name:process.env.BUCKET_NAME,
 }
 module.exports = config
