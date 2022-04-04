@@ -14,7 +14,8 @@ const storageRoutes =(app)=>{
         return res.json(response)
     })
 
-    router.get('/download/:fileName',async(req,res)=>{
+    router.get('/download/:fileName',async (req,res)=>{
+        // res.header('Content-Type','image/png')
         await downloadFile(req.params.fileName,res)
     })
     

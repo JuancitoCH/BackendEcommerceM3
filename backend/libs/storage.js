@@ -35,9 +35,13 @@ const uploadFile=(fileName,buffer)=>{
     })
 }
 
-const downloadFile = (fileName,res)=>{
+const downloadFile = async (fileName,res)=>{
     //Referencia al objeto de archivo en google cloud
     const file = storage.bucket(bucket_name).file(fileName)
+    const [data] = await file.getMetadata()
+    
+    // console.log(data.contentType)
+
     // convertimos el file en readable
     const stream = file.createReadStream()
     .on("error",(error)=>{
@@ -46,6 +50,7 @@ const downloadFile = (fileName,res)=>{
         }
     }) 
     // retornamos en la respuesta el archivo en readable y lo destinamos a la res
+    res.header('Content-Type',data.contentType)
     stream.pipe(res)
 }
 
