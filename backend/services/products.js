@@ -6,12 +6,20 @@ class ProductsService {
     async getAllProducts() {
         return await ProductsModel.find()
     }
+    async searchProduct(name) {
+        const allProducts = await ProductsModel.find()
+        const productsMach= allProducts.filter(product=>{
+            if(product.name.indexOf(name)!==-1)return product
+        })
+        return productsMach
+    }
     async getOneProductId(idProduct) {
         return await ProductsModel.findById(idProduct)
     }
     async getOneProductbyName(name) {
         return await ProductsModel.findOne({ name })
     }
+
     async createProduct(data, file, idUser) {
 
         let product = new ProductsModel({ ...data, idCreator: idUser })

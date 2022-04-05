@@ -8,8 +8,12 @@ class Payments{
             amount: amount,//price
             currency:"usd"
         })
-
+        console.log(intent)
         return intent.client_secret
+    }
+    async createCostumer(email){
+        const costumer = await stripe.costumer
+
     }
     
     createEvent(body,sign){

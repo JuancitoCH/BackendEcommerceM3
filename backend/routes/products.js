@@ -14,6 +14,18 @@ const productsRoutes =(app)=>{
         const allProducts=await productService.getAllProducts()
         return res.json(allProducts)
     })
+    router.get('/id/:idProduct',async(req,res)=>{
+        const product=await productService.getOneProductId(req.params.idProduct)
+        return res.json(product)
+    })
+    router.get('/name/:name',async(req,res)=>{
+        const product=await productService.getOneProductbyName(req.params.name)
+        return res.json(product)
+    })
+    router.get('/search/:name',async(req,res)=>{
+        const product=await productService.searchProduct(req.params.name)
+        return res.json(product)
+    })
 
     router.post('/create',isEditorPage,upload.single('pic'),async(req,res)=>{
         const response = await productService.createProduct(req.body,req.file,req.userData.id)
