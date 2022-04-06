@@ -21,7 +21,7 @@ app.use(cookies())
 app.use("/api/payments/webhook",express.raw({type: 'application/json'}))
 app.use(express.json())
 app.use(cors({
-    origin:['http://localhost:3000'],
+    origin:['http://localhost:3000',"http://127.0.0.1:5500"],
     credentials:true
 }))
 

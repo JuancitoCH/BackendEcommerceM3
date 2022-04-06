@@ -1,4 +1,5 @@
 const express = require('express')
+const { isUser } = require('../middlewares/auth')
 const payments = require('../services/payments')
 
 const Payments=(app)=>{
@@ -8,8 +9,19 @@ const Payments=(app)=>{
     
     const pay = new payments()
 
-    router.post("/intent",async (req,res)=>{
-        const intent = await pay.createIntent(req.body.amount)
+    // router.post("/intent",async (req,res)=>{
+    //     const intent = await pay.createIntent(req.body.amount)
+
+    //     return res.json({
+    //         clientSecret:intent
+    //     })
+    // })
+
+    router.post("/intent/user",async (req,res)=>{
+        const [email,username] = ["cjuan.chona@hotmail.com","Juan"]
+        // const {email,username} = req.userData
+        console.log(req.userData)
+        const intent = await pay.createIntent(req.body.amount,email,username)
 
         return res.json({
             clientSecret:intent

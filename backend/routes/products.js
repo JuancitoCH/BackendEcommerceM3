@@ -14,6 +14,11 @@ const productsRoutes =(app)=>{
         const allProducts=await productService.getAllProducts()
         return res.json(allProducts)
     })
+    router.get('/page/',async(req,res)=>{
+        const {page,limit} = req.query
+        const Products = await productService.getPageProducts(page,limit)
+        return res.json(Products)
+    })
     router.get('/id/:idProduct',async(req,res)=>{
         const product=await productService.getOneProductId(req.params.idProduct)
         return res.json(product)

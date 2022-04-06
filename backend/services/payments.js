@@ -3,18 +3,32 @@ const stripe = require('stripe')(stripe_sk)
 
 const endpointSecret = "whsec_bca0b2dd09f9cdefcb2ef7915d4efc0e489ecbbc3009e74128afd2f606793d0a"
 class Payments{
-    async createIntent(amount){
+    async createIntent(amount,email,name){
+        // https://stripe.com/docs/development/quickstart
+        // https://stripe.com/docs/api/customers/create
+        // TODO: agregar idCostumer a las cuentas en base de datos
+        // si existe creamos una nueva y la guardamos sino usamos la misma
+        // ver si podemos obtenerla desde tripe
+
+        // TODO: redirect a la pagina tal con info del pago y registrarlo en baseD
+        // y mandar email
+        const customer = await stripe.customers.create({
+            email,
+            name
+        })
+        console.log(customer)
         const intent = await stripe.paymentIntents.create({
+            customer:customer.id,
             amount: amount,//price
             currency:"usd"
         })
         console.log(intent)
         return intent.client_secret
     }
-    async createCostumer(email){
-        const costumer = await stripe.costumer
+    // async createCostumer(email){
+    //     const costumer = await stripe.costumer
 
-    }
+    // }
     
     createEvent(body,sign){
         let event;

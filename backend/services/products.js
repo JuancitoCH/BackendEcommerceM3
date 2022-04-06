@@ -6,6 +6,28 @@ class ProductsService {
     async getAllProducts() {
         return await ProductsModel.find()
     }
+    async getPageProducts(page=1,limit=10) {
+        const amountProducts = await ProductsModel.count()
+
+        const numberPages = amountProducts/limit
+        const totalPages = Math.round(numberPages)<numberPages? Math.round(numberPages)+1:Math.round(numberPages)
+
+        if(totalPages<page){
+            return {success:false,message:"this page not exist"}
+        }
+        const skip = (page - 1) * limit
+        const products = await ProductsModel.find().skip(skip).limit(limit)
+
+        // const nextPage=?page=2
+        // const prevPage=
+        return{
+            success:true,
+            data:products,
+            amountProducts,
+            page,
+            totalPages
+        }
+    }
     async searchProduct(name) {
         const allProducts = await ProductsModel.find()
         const productsMach= allProducts.filter(product=>{

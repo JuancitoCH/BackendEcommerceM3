@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form id="payment-form">
+        <div id="payment-element">
+            <!--Stripe.js injects the Payment Element-->
+        </div>
+        <button id="submit">
+            <div class="spinner hidden" id="spinner"></div>
+            <span id="button-text">Pay now</span>
+        </button>
+        <div id="payment-message" class="hidden"></div>
+    </form>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe("pk_test_51Kj28TGJWXLaxmhVvgtq4c6aGB7rBUcoVU7Sana0W0TTmaP0CYd62iOP0HkWMEymFJLO78y7q7evu0i3bTKZqSdm00Dn8Nuo28")
+        let elements
+        fetch("http://localhost:4000/api/payments/intent/user",{
+            headers:{
+                "Content-Type":"application/json"
+            },
+            method:"POST",
+            body:JSON.stringify({
+                amount:10000,
+            })
+        }).then(res=>res.json())
+            .then(data=>{
+            elements = stripe.elements({appearance:{
+                    theme: 'stripe',
+                }, clientSecret:data.clientSecret });
+            const paymentElement = elements.create("payment");
+            paymentElement.mount("#payment-element");
+        })
+
+
+        const form = document.getElementById("payment-form")
+
+        form.onsubmit=async (event)=>{
+            event.preventDefault()
+            const { error } = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    // Make sure to change this to your payment completion page
+                    return_url: "http://localhost:4000",
+                },
+            });
+
+            console.log(error)
+        }
+    </script>
+</body>
+</html>
