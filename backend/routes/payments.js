@@ -29,15 +29,18 @@ const Payments=(app)=>{
     })
     
     router.post("/webhook",async(req,res)=>{
+        // ahora stripe esta a la escucha del webhook online
         const sig = req.headers['stripe-signature'];
-
         const result = pay.createEvent(req.body,sig)
-        
         if(result.success){
             return res.status(200).send()
         }
 
         return res.status(400).send();
+    })
+    router.get('/history',async(req,res)=>{
+        const recips = await pay.getPayments()
+        return res.json(recips)
     })
 }
 module.exports=Payments

@@ -6,7 +6,8 @@ const UsersSchema = new Schema({
     email: {type:String,required:true,unique:true},
     password: {type:String,required:true},
     pic: String,
-    role:{type:Number,default:0}
+    role:{type:Number,default:0},
+    idCostumer:String
 })
 
 UsersSchema.pre('deleteOne',function(next){

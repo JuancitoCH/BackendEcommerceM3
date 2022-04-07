@@ -1,5 +1,6 @@
 const {stripe_pk,stripe_sk} = require('../config/envVars')
 const stripe = require('stripe')(stripe_sk)
+const PaymentsModel = require('../models/Payments')
 
 const endpointSecret = "whsec_bca0b2dd09f9cdefcb2ef7915d4efc0e489ecbbc3009e74128afd2f606793d0a"
 class Payments{
@@ -20,7 +21,8 @@ class Payments{
         const intent = await stripe.paymentIntents.create({
             customer:customer.id,
             amount: amount,//price
-            currency:"usd"
+            currency:"usd",
+            description:""
         })
         console.log(intent)
         return intent.client_secret
@@ -37,7 +39,13 @@ class Payments{
             event = stripe.webhooks.constructEvent(body, sign, endpointSecret);
 
             if(event.type==="payment_intent.succeeded"){
-                console.log(event.data)
+                // console.log(event.data)
+                const {id,amount,amount_received,client_secret,currency,shipping,receipt_email} = event.data.object
+                const infoPayment ={
+                    id,amount,amount_received,client_secret,currency,shipping,receipt_email
+                }
+                this.createPaymentHistory(infoPayment)
+                console.log(infoPayment)
                 return {success:true}
             }else{
                 return {success:true}
@@ -48,6 +56,16 @@ class Payments{
 
         }
     }
+
+    async createPaymentHistory(data){
+        return await PaymentsModel.create({...data})
+    }
+    async getPayments(){
+        return await PaymentsModel.find()
+    }
+
+
+
 }
 
 module.exports = Payments
