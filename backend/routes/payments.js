@@ -21,7 +21,7 @@ const Payments=(app)=>{
         const [email,username] = ["cjuan.chona@hotmail.com","Juan"]
         // const {email,username} = req.userData
         console.log(req.userData)
-        const intent = await pay.createIntent(req.body.amount,email,username)
+        const intent = await pay.createIntent(req.body.amount,email,username,req.body.description)
 
         return res.json({
             clientSecret:intent
