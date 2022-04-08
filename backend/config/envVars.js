@@ -5,6 +5,8 @@ const config={
     port:process.env.PORT,
     stripe_pk:process.env.STRIPE_PK,
     stripe_sk:process.env.STRIPE_SK,
+    webhook_secret:process.env.WEBHOOK_SECRET,
+
     db_userName:process.env.DB_USERNAME,
     db_password:process.env.DB_PASSWORD,
     db_host:process.env.DB_HOST,

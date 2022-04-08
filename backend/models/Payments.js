@@ -8,7 +8,8 @@ const PaymentsSchema = new Schema({
     client_secret:String,
     currency:String,
     shipping:Object,
-    receipt_email:String
+    receipt_email:String,
+    description:String
 })
 
 

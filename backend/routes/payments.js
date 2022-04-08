@@ -20,7 +20,7 @@ const Payments=(app)=>{
     router.post("/intent/user",async (req,res)=>{
         const [email,username] = ["cjuan.chona@hotmail.com","Juan"]
         // const {email,username} = req.userData
-        console.log(req.userData)
+        // console.log(req.userData)
         const intent = await pay.createIntent(req.body.amount,email,username,req.body.description)
 
         return res.json({
@@ -31,12 +31,12 @@ const Payments=(app)=>{
     router.post("/webhook",async(req,res)=>{
         // ahora stripe esta a la escucha del webhook online
         const sig = req.headers['stripe-signature'];
-        const result = pay.createEvent(req.body,sig)
+        const result = await pay.createEvent(req.body,sig)
         if(result.success){
             return res.status(200).send()
         }
 
-        return res.status(400).send();
+        return res.status(400).send(result);
     })
     router.get('/history',async(req,res)=>{
         const recips = await pay.getPayments()
