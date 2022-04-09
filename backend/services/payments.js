@@ -1,38 +1,29 @@
-const { stripe_pk, stripe_sk,webhook_secret } = require('../config/envVars')
+const { stripe_pk, stripe_sk, webhook_secret } = require('../config/envVars')
 const stripe = require('stripe')(stripe_sk)
 const PaymentsModel = require('../models/Payments')
 const sendEmail = require('../libs/email')
+const User = require('../services/users')
 
 // const endpointSecret = "whsec_bca0b2dd09f9cdefcb2ef7915d4efc0e489ecbbc3009e74128afd2f606793d0a"
 const endpointSecret = webhook_secret
 class Payments {
-    async createIntent(amount, email, name, description, products) {
-        // https://stripe.com/docs/development/quickstart
-        // https://stripe.com/docs/api/customers/create
-        // TODO: agregar idCostumer a las cuentas en base de datos
-        // si existe creamos una nueva y la guardamos sino usamos la misma
-        // ver si podemos obtenerla desde tripe
-
-        // TODO: redirect a la pagina tal con info del pago y registrarlo en baseD
-        // y mandar email
-        const customer = await stripe.customers.create({
-            email,
-            name
-        })
-        // console.log(customer)
-        const intent = await stripe.paymentIntents.create({
-            customer: customer.id,
-            amount: amount,
-            currency: "usd",
-            description
-        })
-        // console.log(intent)
-        return intent.client_secret
+    constructor() {
+        this.userService = new User()
     }
-    // async createCostumer(email){
-    //     const costumer = await stripe.costumer
+    async createIntent(amount, userData, description, products) {
+        const idCustomer  = await this.getCustomerId(userData)
+        if(idCustomer){
 
-    // }
+            const intent = await stripe.paymentIntents.create({
+                customer:idCustomer,
+                amount: amount,
+                currency: "usd",
+                description
+            })
+            return intent.client_secret
+        }
+        return 
+    }
 
     async createEvent(body, sign) {
         let event;
@@ -40,9 +31,16 @@ class Payments {
             event = stripe.webhooks.constructEvent(body, sign, endpointSecret);
             if (event.type === "payment_intent.succeeded") {
                 console.log(event.data.object)
-                const { id, amount, amount_received, client_secret, currency, shipping, receipt_email,description } = event.data.object
+                const { id, amount, amount_received, client_secret, currency, shipping, receipt_email, description } = event.data.object
                 const infoPayment = {
-                    id, amount, amount_received, client_secret, currency, shipping, receipt_email,description
+                    id,
+                    amount,
+                    amount_received,
+                    client_secret,
+                    currency,
+                    shipping,
+                    receipt_email,
+                    description
                 }
                 await this.createPaymentHistory(infoPayment)
                 await this.sendEmailPayInfo(infoPayment)
@@ -72,6 +70,25 @@ class Payments {
         `)
     }
 
+    async getCustomerId(userData) {
+        const user = await this.userService.getUserId(userData.id)
+        // console.log(user)
+        if (!user) return console.log('noexiste')
+        if (!user.idCustomer) {
+            const customer = await stripe.customers.create({
+                email: user.email,
+                name: user.username
+            })
+            console.log('notiene')
+
+            const newClient = await this.userService.updateUserIdCostumer(userData.id, customer.id)
+            
+            return newClient.idCustomer
+        }
+        console.log('tiene id')
+        return user.idCustomer
+
+    }
 
 
 }

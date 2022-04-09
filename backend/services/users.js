@@ -38,7 +38,7 @@ class userService {
     }
     // TODO: usarla al crear al costumer
     async updateUserIdCostumer(id, data) {
-        return await UserModel.findByIdAndUpdate(id, {idCostumer:data}, { new: true })
+        return await UserModel.findByIdAndUpdate(id, {idCustomer:data}, { new: true })
     }
 }
 module.exports = userService

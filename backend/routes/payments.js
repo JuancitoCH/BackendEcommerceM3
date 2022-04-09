@@ -17,11 +17,9 @@ const Payments=(app)=>{
     //     })
     // })
 
-    router.post("/intent/user",async (req,res)=>{
-        const [email,username] = ["cjuan.chona@hotmail.com","Juan"]
-        // const {email,username} = req.userData
-        // console.log(req.userData)
-        const intent = await pay.createIntent(req.body.amount,email,username,req.body.description)
+    router.post("/intent/user",isUser,async (req,res)=>{
+        console.log(req.userData)
+        const intent = await pay.createIntent(req.body.amount,req.userData,req.body.description)
 
         return res.json({
             clientSecret:intent

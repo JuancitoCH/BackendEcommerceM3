@@ -7,7 +7,7 @@ const UsersSchema = new Schema({
     password: {type:String,required:true},
     pic: String,
     role:{type:Number,default:0},
-    idCostumer:String
+    idCustomer:String
 })
 
 UsersSchema.pre('deleteOne',function(next){
