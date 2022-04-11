@@ -10,13 +10,36 @@ class Payments {
     constructor() {
         this.userService = new User()
     }
-    async createIntent(amount, userData, description, products) {
+    async createIntent(amount, userData, name,quantity=1 ) {
+        const description = `${name} x ${quantity}`
         const idCustomer  = await this.getCustomerId(userData)
         if(idCustomer){
 
             const intent = await stripe.paymentIntents.create({
                 customer:idCustomer,
-                amount: amount,
+                amount: amount*quantity*100,
+                currency: "usd",
+                description
+            })
+            return intent.client_secret
+        }
+        return 
+    }
+
+    async createIntentCart(userData,{products} ) {
+        let amount
+        let description
+        
+        products.map(product=>{
+            amount+=(product._id.price * product.quantity)
+            description += `  ${product._id.name} x ${product.quantity}  `
+        })
+        const idCustomer  = await this.getCustomerId(userData)
+        if(idCustomer){
+
+            const intent = await stripe.paymentIntents.create({
+                customer:idCustomer,
+                amount: amount*100,
                 currency: "usd",
                 description
             })
@@ -65,7 +88,7 @@ class Payments {
     async sendEmailPayInfo(data) {
         await sendEmail(data.receipt_email, "Recibo Efruits", "gracias por su compra", `
         <h1>Recibo de Compra</h1>
-        <p>$${data.amount_received}</p>
+        <p>$${ data.amount_received/100} USD</p>
         <p>por la compra de ${data.description}</p>
         `)
     }

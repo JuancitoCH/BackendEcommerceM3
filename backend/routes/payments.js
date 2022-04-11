@@ -1,6 +1,8 @@
 const express = require('express')
 const { isUser } = require('../middlewares/auth')
 const payments = require('../services/payments')
+const Product = require('../services/products')
+const Cart = require('../services/cart')
 
 const Payments=(app)=>{
     const router = express.Router()
@@ -8,6 +10,8 @@ const Payments=(app)=>{
     app.use('/api/payments',router)
     
     const pay = new payments()
+    const productsService = new Product()
+    const cartService = new Cart()
 
     // router.post("/intent",async (req,res)=>{
     //     const intent = await pay.createIntent(req.body.amount)
@@ -18,8 +22,18 @@ const Payments=(app)=>{
     // })
 
     router.post("/intent/user",isUser,async (req,res)=>{
-        console.log(req.userData)
-        const intent = await pay.createIntent(req.body.amount,req.userData,req.body.description)
+        
+        const {price,name} = await productsService.getOneProductId(req.body.idProduct)
+        const intent = await pay.createIntent(price,req.userData,name,quantity)
+
+        return res.json({
+            clientSecret:intent
+        })
+    })
+
+    router.post("/intent/user/cart",isUser,async (req,res)=>{
+        const userCart = await cartService.getCartUser(req.userData.id)
+        const intent = await pay.createIntentCart(req.userData,userCart)
 
         return res.json({
             clientSecret:intent
