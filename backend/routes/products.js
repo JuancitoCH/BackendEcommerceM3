@@ -15,7 +15,9 @@ const productsRoutes =(app)=>{
         return res.json(allProducts)
     })
     router.get('/page/',async(req,res)=>{
-        const {page,limit} = req.query
+        const page = parseInt(req.query.page) || undefined
+        const limit = parseInt(req.query.limit) || undefined
+        
         const Products = await productService.getPageProducts(page,limit)
         return res.json(Products)
     })
@@ -49,8 +51,27 @@ const productsRoutes =(app)=>{
         const response = await productService.updatePullArrays(req.params.idProduct,req.body)
         return res.json(response)
     })
-    
 
+    router.get('/get/product/:category',async(req,res)=>{
+        const response = await productService.filterCategory(req.params.category)
+        return res.json(response)
+    })
+    router.get('/new/product/:numberProducts',async(req,res)=>{
+        const numberProducts = parseInt(req.params.numberProducts) 
+        const response = await productService.newProducts(numberProducts?numberProducts:undefined)
+        return res.json(response)
+    })
+    
+    router.get('/get/page/category/',async(req,res)=>{
+        const page = parseInt(req.query.page) || undefined
+        const limit = parseInt(req.query.limit) || undefined
+        const category = req.query.category
+        
+        const Products = await productService.filterCategoryPage(category,page,limit)
+        return res.json(Products)
+    })
+    
+    
    
     
 }
