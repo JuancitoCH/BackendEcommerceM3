@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "set ENV_MODE=dev& npx nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "startDev": "npx nodemon index.js"
   },
   "keywords": [],
   "author": "",

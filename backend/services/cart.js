@@ -37,6 +37,11 @@ class Cart{
             $pull:{products:{_id:idProduct}}
         },{new:true})
     }
+    async resetProductOnCart(idUser){
+        return await CartModel.findOneAndUpdate({idUser},{
+        products:[]
+        },{new:true})
+    }
 
 }
 

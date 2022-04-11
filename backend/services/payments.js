@@ -23,13 +23,14 @@ class Payments {
             })
             return intent.client_secret
         }
-        return 
+        return {success:false,message:"An Error has ocurre"}
     }
 
     async createIntentCart(userData,{products} ) {
-        let amount
+        let amount=0
         let description
         
+        if(products.length===0) return {success:false,message:"the cart dont has products"}
         products.map(product=>{
             amount+=(product._id.price * product.quantity)
             description += `  ${product._id.name} x ${product.quantity}  `
@@ -45,7 +46,7 @@ class Payments {
             })
             return intent.client_secret
         }
-        return 
+        return {success:false,message:"An Error has ocurre"}
     }
 
     async createEvent(body, sign) {
@@ -80,7 +81,7 @@ class Payments {
     }
 
     async createPaymentHistory(data) {
-        return await PaymentsModel.create({ ...data })
+        return await PaymentsModel.create({ ...data,date:Date.now()})
     }
     async getPayments() {
         return await PaymentsModel.find()

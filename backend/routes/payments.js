@@ -22,18 +22,21 @@ const Payments=(app)=>{
     // })
 
     router.post("/intent/user",isUser,async (req,res)=>{
-        
+        if(!req.body.idProduct)return res.json({message:"idProduct is required",success:false})
         const {price,name} = await productsService.getOneProductId(req.body.idProduct)
-        const intent = await pay.createIntent(price,req.userData,name,quantity)
-
+        const intent = await pay.createIntent(price,req.userData,name,req.body.quantity)
+        if(intent.success===false) return res.json(intent)
         return res.json({
             clientSecret:intent
         })
     })
 
     router.post("/intent/user/cart",isUser,async (req,res)=>{
+        
         const userCart = await cartService.getCartUser(req.userData.id)
         const intent = await pay.createIntentCart(req.userData,userCart)
+        if(intent.success===false) return res.json(intent)
+        await cartService.resetProductOnCart(req.userData.id)
 
         return res.json({
             clientSecret:intent
