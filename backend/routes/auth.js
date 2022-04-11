@@ -16,6 +16,9 @@ const authRoutes =(app)=>{
         const responseObject = await authService.loginUser(req.body)
         return cookieResponse(res,responseObject)
     })
+    router.get('/logout',async(req,res)=>{
+        return cookieResponse(res,'')
+    })
     router.get('/login/validate',isUser,async(req,res)=>{
         return res.json({success:true,user:{
             id:req.userData.id,

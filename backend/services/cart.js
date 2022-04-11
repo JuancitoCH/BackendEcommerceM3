@@ -10,14 +10,14 @@ class Cart{
     async createCartUser(idUser){
         return await CartModel.create({idUser})
     }
-    async addProductToCart(idUser,idProduct){
+    async addProductToCart(idUser,idProduct,quantity=1){
         const cart = await CartModel.findOne({idUser})
         let productOn=false
         cart.products.forEach(product => {if(product._id.valueOf()===idProduct) return productOn = true})
         
         if(!productOn){
             return await CartModel.findOneAndUpdate({idUser},{
-                $push:{products:{_id:idProduct,quantity:1}}
+                $push:{products:{_id:idProduct,quantity}}
             },{new:true})
         }
         return {success:false,message:"Product alredy in your cart"}

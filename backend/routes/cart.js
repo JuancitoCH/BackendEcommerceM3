@@ -22,7 +22,7 @@ const cartRoutes =(app)=>{
         return res.json(carts)
     })
     router.post('/product/add',isUser,async(req,res)=>{
-        const carts = await cartService.addProductToCart(req.userData.id,req.body.idProduct)
+        const carts = await cartService.addProductToCart(req.userData.id,req.body.idProduct,req.body.quantity)
         return res.json(carts)
     })
     router.post('/product/update/quantity',isUser,async(req,res)=>{
