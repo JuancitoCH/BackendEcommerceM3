@@ -19,7 +19,7 @@ class Payments {
 
             const intent = await stripe.paymentIntents.create({
                 customer:idCustomer,
-                amount: amount*quantity*100,
+                amount: Math.round(amount*quantity*100),
                 currency: "usd",
                 description
             })

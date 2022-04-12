@@ -33,5 +33,9 @@ const cartRoutes =(app)=>{
         const carts = await cartService.deleteProductOnCart(req.userData.id,req.body.idProduct)
         return res.json(carts)
     })
+    router.post('/product/pull',isUser,async(req,res)=>{
+        const carts = await cartService.deleteProductOnCart(req.userData.id,req.body.idProduct)
+        return res.json(carts)
+    })
 }
 module.exports = cartRoutes

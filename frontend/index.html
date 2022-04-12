@@ -24,8 +24,8 @@
     <script>
 
         const main = async () => {
-            await fetch("http://localhost:4000/user/service/login", {
-            // await fetch("https://eccomerce-346201.rj.r.appspot.com/user/service/login", {
+            // await fetch("http://localhost:4000/user/service/login", {
+            await fetch("https://eccomerce-346201.rj.r.appspot.com/user/service/login", {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -41,8 +41,8 @@
         const stripe = Stripe("pk_test_51Kj28TGJWXLaxmhVvgtq4c6aGB7rBUcoVU7Sana0W0TTmaP0CYd62iOP0HkWMEymFJLO78y7q7evu0i3bTKZqSdm00Dn8Nuo28")
         let elements
         // await fetch("https://eccomerce-346201.rj.r.appspot.com/api/payments/intent/user/cart", {
-        await fetch("http://localhost:4000/api/payments/intent/user/cart", {
-        //    await fetch("http://localhost:4000/api/payments/intent/user", {
+        // await fetch("http://localhost:4000/api/payments/intent/user/cart", {
+           await fetch("https://eccomerce-346201.rj.r.appspot.com/api/payments/intent/user/", {
                     headers: {
                         "Content-Type": "application/json"
             },
@@ -50,8 +50,7 @@
                     credentials:'include',
                     body: JSON.stringify({
                         idProduct: "624a57e7ce15c81834a9e7d8",
-                        description: "banano",
-                        quantity:1
+                        quantity:3
                     })
             }).then(res => res.json())
                 .then(data => {
