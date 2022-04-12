@@ -3,12 +3,14 @@ const stripe = require('stripe')(stripe_sk)
 const PaymentsModel = require('../models/Payments')
 const sendEmail = require('../libs/email')
 const User = require('../services/users')
+const Cart = require('./cart')
 
 // const endpointSecret = "whsec_bca0b2dd09f9cdefcb2ef7915d4efc0e489ecbbc3009e74128afd2f606793d0a"
 const endpointSecret = webhook_secret
 class Payments {
     constructor() {
         this.userService = new User()
+        this.cartService = new Cart()
     }
     async createIntent(amount, userData, name,quantity=1 ) {
         const description = `${name} x ${quantity}`
@@ -68,6 +70,7 @@ class Payments {
                 }
                 await this.createPaymentHistory(infoPayment)
                 await this.sendEmailPayInfo(infoPayment)
+                await this.cartService.resetProductOnCart(receipt_email)
                 // console.log(infoPayment)
                 return { success: true }
             } else {

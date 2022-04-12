@@ -1,4 +1,5 @@
 const CartModel = require('../models/cart')
+const userService = require('./users')
 
 class Cart{
     async getCarts(){
@@ -37,8 +38,10 @@ class Cart{
             $pull:{products:{_id:idProduct}}
         },{new:true})
     }
-    async resetProductOnCart(idUser){
-        return await CartModel.findOneAndUpdate({idUser},{
+    async resetProductOnCart(email){
+        const user = new userService()
+        const {_id} = await user.getUserbyEmail(email)
+        return await CartModel.findOneAndUpdate({idUser:_id},{
         products:[]
         },{new:true})
     }

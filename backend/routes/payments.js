@@ -36,7 +36,7 @@ const Payments=(app)=>{
         const userCart = await cartService.getCartUser(req.userData.id)
         const intent = await pay.createIntentCart(req.userData,userCart)
         if(intent.success===false) return res.json(intent)
-        await cartService.resetProductOnCart(req.userData.id)
+        
 
         return res.json({
             clientSecret:intent
