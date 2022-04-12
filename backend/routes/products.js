@@ -54,7 +54,7 @@ const productsRoutes =(app)=>{
 
     router.get('/get/product/:category',async(req,res)=>{
         const response = await productService.filterCategory(req.params.category)
-        return res.json(response)
+        return res.json({data:[...response]})
     })
     router.get('/new/product/:numberProducts',async(req,res)=>{
         const numberProducts = parseInt(req.params.numberProducts) 

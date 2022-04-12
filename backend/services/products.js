@@ -19,8 +19,8 @@ class ProductsService {
         const skip = (page - 1) * limit
         const products = await ProductsModel.find().skip(skip).limit(limit)
 
-        const nextPage = page === totalPages ? null : "/api/products?page=" + (page + 1)+"&limit=" +limit
-        const prevPage = page === 1 ? null : "/api/products?page=" + (page - 1) +"&limit=" +limit
+        const nextPage = page === totalPages ? null : "/products/page/?page=" + (page + 1)+"&limit=" +limit
+        const prevPage = page === 1 ? null : "/products/page/?page=" + (page - 1) +"&limit=" +limit
         return {
             success: true,
             data: products,
@@ -33,8 +33,10 @@ class ProductsService {
     }
     async searchProduct(name) {
         const allProducts = await ProductsModel.find()
+        // const name = nameProd.toLowercase()
         const productsMach = allProducts.filter(product => {
-            if (product.name.indexOf(name) !== -1) return product
+            let prodName = product.name.toLowerCase()
+            if (prodName.indexOf(name) !== -1) return product
         })
         return productsMach
     }
