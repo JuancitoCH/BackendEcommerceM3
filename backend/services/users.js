@@ -15,10 +15,17 @@ class userService {
     }
 
     async createUser(data) {
+        // if(!data.email) return 
         delete data.role
+        data.email  = data.email.replace(/ /g,'')
+        // data.email  = data.email.trim()
+        data.email = data.email.toString().toLowerCase()
         const User = new UserModel(data)
         const validate = validateCreate(User)
         if(validate.error) return { ...validate }
+        
+        const exist = await UserModel.findOne({email:data.email})
+        if(exist)return {success:false, message:'user alredy exist'}
         const userCreate =await User.save()
         return {...userCreate._doc,success:true}
     }
