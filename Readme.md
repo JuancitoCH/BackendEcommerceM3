@@ -18,6 +18,7 @@ The Payment of products use Stripe.
 - Stripe for Payments
 - Google cloud for hosting
 - MongoDB Atlas
+- SendGrid for send Emails
 
 *Google Cloud Services:*
 - App Engine
